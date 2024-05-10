@@ -1,0 +1,86 @@
+//LOGAR:
+
+import UIKit
+
+class LoginViewController: UIViewController {
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var statusLabel: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Configurações adicionais, se necessário
+    }
+
+    @IBAction func loginButtonTapped(_ sender: UIButton) {
+        // Aqui você colocará a lógica para verificar o login
+        let username = usernameTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        
+        if username.isEmpty || password.isEmpty {
+            statusLabel.text = "Por favor, preencha todos os campos."
+        } else {
+            // Coloque aqui a lógica de autenticação, por exemplo:
+            if username == "usuario" && password == "senha" {
+                statusLabel.text = "Login bem-sucedido!"
+                // Aqui você pode navegar para a próxima tela ou executar outras ações após o login
+            } else {
+                statusLabel.text = "Credenciais inválidas. Tente novamente."
+            }
+        }
+    }
+}
+
+
+//ESTABELECER METAS:
+import UIKit
+
+class GoalViewController: UIViewController {
+    @IBOutlet weak var metaLabel: UILabel!
+    @IBOutlet weak var metaSlider: UISlider!
+    @IBOutlet weak var valorSelecionadoLabel: UILabel!
+    
+    var meta: Float = 0.0 // Valor da meta inicial
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        atualizarMeta()
+    }
+
+    func atualizarMeta() {
+        meta = metaSlider.value
+        metaLabel.text = "Meta: R$ \(String(format: "%.2f", meta))"
+    }
+
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
+        atualizarMeta()
+        valorSelecionadoLabel.text = "Valor selecionado: R$ \(String(format: "%.2f", sender.value))"
+    }
+
+    @IBAction func confirmarMeta(_ sender: UIButton) {
+        // Aqui você pode salvar a meta no sistema ou fazer outras ações necessárias
+        // Por exemplo, exibir uma mensagem de confirmação
+        let alerta = UIAlertController(title: "Meta confirmada", message: "Sua meta de R$ \(String(format: "%.2f", meta)) foi estabelecida.", preferredStyle: .alert)
+        alerta.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alerta, animated: true, completion: nil)
+    }
+} 
+
+//Tela de LaunchScreen que direciona o usuário para a tela de cadastro: 
+
+import UIKit
+
+class LaunchViewController: UIViewController {
+    @IBOutlet weak var cadastroButton: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    @IBAction func cadastroButtonTapped(_ sender: UIButton) {
+        // Aqui você pode adicionar o código para direcionar o usuário para a tela de cadastro
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let cadastroVC = storyboard.instantiateViewController(withIdentifier: "CadastroViewController") as! CadastroViewController
+        navigationController?.pushViewController(cadastroVC, animated: true)
+    }
+}
