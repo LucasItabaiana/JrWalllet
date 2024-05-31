@@ -1,86 +1,112 @@
 //LOGAR:
 
-import UIKit
-
-class LoginViewController: UIViewController {
-    @IBOutlet weak var usernameTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var statusLabel: UILabel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Configurações adicionais, se necessário
-    }
-
-    @IBAction func loginButtonTapped(_ sender: UIButton) {
-        // Aqui você colocará a lógica para verificar o login
-        let username = usernameTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        
-        if username.isEmpty || password.isEmpty {
-            statusLabel.text = "Por favor, preencha todos os campos."
-        } else {
-            // Coloque aqui a lógica de autenticação, por exemplo:
-            if username == "usuario" && password == "senha" {
-                statusLabel.text = "Login bem-sucedido!"
-                // Aqui você pode navegar para a próxima tela ou executar outras ações após o login
-            } else {
-                statusLabel.text = "Credenciais inválidas. Tente novamente."
-            }
-        }
-    }
-}
+if (username.isEmpty() || password.isEmpty()) {
+                    status = "Por favor, preencha todos os campos."
+                } else {
+                    // Lógica de autenticação
+                    if (username == "usuario" && password == "senha") {
+                        status = "Login bem-sucedido!"
+                        // Navegar para a próxima tela ou executar outras ações após o login
+                    } else {
+                        status = "Credenciais inválidas. Tente novamente."
+                    }
+                }
 
 
 //ESTABELECER METAS:
-import UIKit
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 
-class GoalViewController: UIViewController {
-    @IBOutlet weak var metaLabel: UILabel!
-    @IBOutlet weak var metaSlider: UISlider!
-    @IBOutlet weak var valorSelecionadoLabel: UILabel!
-    
-    var meta: Float = 0.0 // Valor da meta inicial
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        atualizarMeta()
-    }
+@Composable
+fun GoalScreen() {
+    var metaText by remember { mutableStateOf(TextFieldValue()) }
 
-    func atualizarMeta() {
-        meta = metaSlider.value
-        metaLabel.text = "Meta: R$ \(String(format: "%.2f", meta))"
-    }
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center
+    ) {
+        OutlinedTextField(
+            value = metaText,
+            onValueChange = { metaText = it },
+            label = { Text("Meta") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
 
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-        atualizarMeta()
-        valorSelecionadoLabel.text = "Valor selecionado: R$ \(String(format: "%.2f", sender.value))"
-    }
-
-    @IBAction func confirmarMeta(_ sender: UIButton) {
-        // Aqui você pode salvar a meta no sistema ou fazer outras ações necessárias
-        // Por exemplo, exibir uma mensagem de confirmação
-        let alerta = UIAlertController(title: "Meta confirmada", message: "Sua meta de R$ \(String(format: "%.2f", meta)) foi estabelecida.", preferredStyle: .alert)
-        alerta.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alerta, animated: true, completion: nil)
+        Button(
+            onClick = {
+                val meta = metaText.text.toFloatOrNull()
+                if (meta != null) {
+                    // Lógica para salvar a meta ou outras ações necessárias
+                    val context = LocalContext.current
+                    AlertDialog(
+                        onDismissRequest = { },
+                        title = { Text("Meta confirmada") },
+                        text = { Text("Sua meta de R$ ${"%.2f".format(meta)} foi estabelecida.") },
+                        confirmButton = {
+                            Button(
+                                onClick = { /* Dismiss */ },
+                            ) {
+                                Text("OK")
+                            }
+                        },
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                } else {
+                    // Exibir um alerta indicando que a entrada não é válida
+                    val context = LocalContext.current
+                    AlertDialog(
+                        onDismissRequest = { },
+                        title = { Text("Erro") },
+                        text = { Text("Por favor, insira um valor válido para a meta.") },
+                        confirmButton = {
+                            Button(
+                                onClick = { /* Dismiss */ },
+                            ) {
+                                Text("OK")
+                            }
+                        },
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Text("Confirmar Meta")
+        }
     }
 } 
 
 //Tela de LaunchScreen que direciona o usuário para a tela de cadastro: 
 
-import UIKit
+package com.example.jrwallet
 
-class LaunchViewController: UIViewController {
-    @IBOutlet weak var cadastroButton: UIButton!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.os.Bundle
+import android.widget.ImageView
+
+class MainActivity : AppCompatActivity() {
+    lateinit var irParaLogin : ImageView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        irParaLogin = findViewById(R.id.btnIrParaLogin)
+
+        irParaLogin.setOnClickListener { chamatela() }
     }
 
-    @IBAction func cadastroButtonTapped(_ sender: UIButton) {
-        // Aqui você pode adicionar o código para direcionar o usuário para a tela de cadastro
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let cadastroVC = storyboard.instantiateViewController(withIdentifier: "CadastroViewController") as! CadastroViewController
-        navigationController?.pushViewController(cadastroVC, animated: true)
+    fun chamatela(){
+        startActivity(Intent(this, Login::class.java))
     }
 }
