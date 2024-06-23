@@ -1,0 +1,130 @@
+// SAIR DA CONTA
+
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.myapp.LoginActivity
+
+class MainActivity : AppCompatActivity() {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+
+        val logoutButton = findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            logout() // Chama a função logout quando o botão é clicado
+        }
+    }
+
+
+    private fun logout() {
+        // Acessa as preferências compartilhadas (SharedPreferences)
+        val sharedPref: SharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+
+        editor.clear()
+        editor.apply()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent) 
+        finish()
+    }
+}
+
+
+//MOSTRAR SALDO
+
+
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+// Classe da atividade principal
+class WalletActivity : AppCompatActivity() {
+
+    // Método que é chamado quando a atividade é criada
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_wallet)
+
+        // Chama a função para mostrar o saldo disponível
+        showBalance()
+    }
+
+    // Função para mostrar o saldo disponível
+    private fun showBalance() {
+        // Acessa as preferências compartilhadas (SharedPreferences)
+        val sharedPref: SharedPreferences = getSharedPreferences("wallet_prefs", Context.MODE_PRIVATE)
+        
+        // Obtém o saldo armazenado nas preferências compartilhadas
+        val balance = sharedPref.getFloat("balance", 0.0f)
+
+        // Encontra o TextView na interface de usuário onde o saldo será mostrado
+        val balanceTextView = findViewById<TextView>(R.id.balanceTextView)
+
+        // Configura o texto do TextView para mostrar o saldo
+        balanceTextView.text = "Saldo disponível: R$ %.2f".format(balance)
+    }
+}
+
+
+// REDEFINIR SENHA
+
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+
+class ResetPasswordActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_reset_password)
+
+    
+        val newPasswordEditText = findViewById<EditText>(R.id.newPasswordEditText)
+        val confirmPasswordEditText = findViewById<EditText>(R.id.confirmPasswordEditText)
+        val resetButton = findViewById<Button>(R.id.resetButton)
+
+
+        resetButton.setOnClickListener {
+            val newPassword = newPasswordEditText.text.toString()
+            val confirmPassword = confirmPasswordEditText.text.toString()
+
+            // Verificando se as senhas coincidem
+            if (newPassword == confirmPassword) {
+                // Chamando a função para redefinir a senha
+                resetPassword(newPassword)
+            } else {
+            Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun resetPassword(newPassword: String) {
+      (SharedPreferences)
+        val sharedPref: SharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+
+        
+        editor.putString("password", newPassword)
+        editor.apply()
+
+       
+        Toast.makeText(this, "Senha redefinida com sucesso", Toast.LENGTH_SHORT).show()
+
+        // Finaliza a atividade atual e retorna para a anterior
+        finish()
+    }
+}
