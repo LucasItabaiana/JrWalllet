@@ -1,1 +1,98 @@
+FUNCIONALIDADE 1:
+
+// MainActivity.kt
+package com.example.financialeducation
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.financialeducation.ui.theme.FinancialEducationTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            FinancialEducationTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    FinancialGoalScreen()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FinancialGoalScreen() {
+    // Simulação dos dados do objetivo
+    val goalAmount = 1000 // valor total do objetivo
+    var currentAmount by remember { mutableStateOf(300) } // valor atual que a criança possui
+
+    val progress = currentAmount.toFloat() / goalAmount
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Seu Objetivo Financeiro",
+            fontSize = 24.sp,
+            color = Color.Blue
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Você está ${"%.1f".format(progress * 100)}% perto do seu objetivo!",
+            fontSize = 20.sp
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Box(
+            modifier = Modifier
+                .height(20.dp)
+                .fillMaxWidth()
+                .background(Color.Gray)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width((progress * 100).dp)
+                    .background(Color.Green)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { /* Ação para adicionar mais dinheiro */ }) {
+            Text("Adicionar Dinheiro")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewFinancialGoalScreen() {
+    FinancialEducationTheme {
+        FinancialGoalScreen()
+    }
+}
+
+
+
+FUNCIONALIDADE 2:
 
